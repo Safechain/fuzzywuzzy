@@ -1,10 +1,12 @@
-.. image:: https://travis-ci.org/seatgeek/fuzzywuzzy.svg?branch=master
-    :target: https://travis-ci.org/seatgeek/fuzzywuzzy
 
 FuzzyWuzzy
 ==========
 
+The SafeChain fork of seatgeeks `fuzzywuzzy <https://github.com/seatgeek/fuzzywuzzy>`.
+
 Fuzzy string matching like a boss. It uses `Levenshtein Distance <https://en.wikipedia.org/wiki/Levenshtein_distance>`_ to calculate the differences between sequences in a simple-to-use package.
+
+`This overview <https://chairnerd.seatgeek.com/fuzzywuzzy-fuzzy-string-matching-in-python/>` is extremely helpful.
 
 Requirements
 ============
@@ -23,39 +25,13 @@ For testing
 Installation
 ============
 
-Using PIP via PyPI
-
-.. code:: bash
-
-    pip install fuzzywuzzy
-
-or the following to install `python-Levenshtein` too
-
-.. code:: bash
-
-    pip install fuzzywuzzy[speedup]
-
-
-Using PIP via Github
-
-.. code:: bash
-
-    pip install git+git://github.com/seatgeek/fuzzywuzzy.git@0.17.0#egg=fuzzywuzzy
-
-Adding to your ``requirements.txt`` file (run ``pip install -r requirements.txt`` afterwards)
-
-.. code:: bash
-
-    git+ssh://git@github.com/seatgeek/fuzzywuzzy.git@0.17.0#egg=fuzzywuzzy
-    
 Manually via GIT
 
 .. code:: bash
 
-    git clone git://github.com/seatgeek/fuzzywuzzy.git fuzzywuzzy
+    git clone git://github.com/Safechain/fuzzywuzzy.git fuzzywuzzy
     cd fuzzywuzzy
-    python setup.py install
-
+    pip install -e .
 
 Usage
 =====
@@ -123,19 +99,6 @@ You can also pass additional parameters to ``extractOne`` method to make it use 
 
 .. |Build Status| image:: https://api.travis-ci.org/seatgeek/fuzzywuzzy.png?branch=master
    :target: https:travis-ci.org/seatgeek/fuzzywuzzy
-
-Known Ports
-============
-
-FuzzyWuzzy is being ported to other languages too! Here are a few ports we know about:
-
--  Java: `xpresso's fuzzywuzzy implementation <https://github.com/WantedTechnologies/xpresso/wiki/Approximate-string-comparison-and-pattern-matching-in-Java>`_
--  Java: `fuzzywuzzy (java port) <https://github.com/xdrop/fuzzywuzzy>`_
--  Rust: `fuzzyrusty (Rust port) <https://github.com/logannc/fuzzyrusty>`_
--  JavaScript: `fuzzball.js (JavaScript port) <https://github.com/nol13/fuzzball.js>`_
--  C++: `Tmplt/fuzzywuzzy <https://github.com/Tmplt/fuzzywuzzy>`_
--  C#: `fuzzysharp (.Net port) <https://github.com/BoomTownRoi/BoomTown.FuzzySharp>`_
--  Go: `go-fuzzywuzz (Go port) <https://github.com/paul-mannino/go-fuzzywuzzy>`_
 
 
 
