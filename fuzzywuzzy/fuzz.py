@@ -68,6 +68,56 @@ def partial_ratio(s1, s2):
     return utils.intr(100 * max(scores))
 
 
+###############################
+# SafeChain Scoring Functions #
+###############################
+
+@utils.check_for_none
+@utils.check_for_equivalence
+@utils.check_empty_string
+def search(search_text, body_text, threshold=88):
+    """"Return a list of the indexes of the most similar substrings in body
+    text a la, [ [start_pos, end_pos, score ], [start_pos, end_pos, score ],... ]."""
+
+    assert isinstance(threshold, float)
+    assert threshold > 0
+    assert threshold <= 100 
+
+    search_text, body_text = utils.make_type_consistent(search_text, body_text)
+
+    if len(search_text) <= len(body_text):
+        shorter = search_text
+        longer = body_text
+    else:
+        raise ValueError('search text longer than body text!')
+
+    m = SequenceMatcher(None, shorter, longer)
+    blocks = m.get_matching_blocks()
+
+    # each block represents a sequence of matching characters in a string
+    # of the form (idx_1, idx_2, len)
+    # the best partial match will block align with at least one of those blocks
+    #   e.g. shorter = "abcd", longer = XXXbcdeEEE
+    #   block = (1,3,3)
+    #   best score === ratio("abcd", "Xbcd")
+    scores = []
+    for block in blocks:
+        long_start = block[1] - block[0] if (block[1] - block[0]) > 0 else 0
+        long_end = long_start + len(shorter)
+        long_substr = longer[long_start:long_end]
+
+        m2 = SequenceMatcher(None, shorter, long_substr)
+        scores.append( [ long_start, long_end, long_substr ] )
+
+    best_matches = []
+    for match in scores:
+        score = max(ratio(shorter, match[-1]),partial_ratio(shorter,match[-1]), token_sort_ratio(shorter,match[-1]), token_set_ratio(shorter,match[-1]))
+        if score >= threshold:
+            best_matches.append( [ match[0], match[1], match[2] ] )
+
+    return best_matches
+
+
 ##############################
 # Advanced Scoring Functions #
 ##############################
