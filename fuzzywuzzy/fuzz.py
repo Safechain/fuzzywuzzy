@@ -79,9 +79,9 @@ def search(search_text, body_text, threshold=88):
     """"Return a list of the indexes of the most similar substrings in body
     text a la, [ [start_pos, end_pos, score ], [start_pos, end_pos, score ],... ]."""
 
-    assert isinstance(threshold, float)
+    assert isinstance(threshold, (float, int))
     assert threshold > 0
-    assert threshold <= 100 
+    assert threshold <= 100
 
     search_text, body_text = utils.make_type_consistent(search_text, body_text)
 
@@ -100,6 +100,34 @@ def search(search_text, body_text, threshold=88):
     #   e.g. shorter = "abcd", longer = XXXbcdeEEE
     #   block = (1,3,3)
     #   best score === ratio("abcd", "Xbcd")
+
+    
+    # Check every window. slow, but likely effective?
+    scores = []
+    long_start = 0
+    long_end = len(shorter)
+    highest_scoring_overlap = None
+    highest_score_for_overlap = 0
+    overlap_num = 0
+    while True:
+        if highest_scoring_overlap and long_start % len(shorter) == 0:
+            scores.append(highest_scoring_overlap)
+            highest_scoring_overlap = None
+            highest_score_for_overlap = 0
+        try:
+            long_substr = longer[long_start:long_end]
+            assert len(long_substr) == len(shorter)
+            score = max(ratio(shorter, long_substr),partial_ratio(shorter,long_substr), token_sort_ratio(shorter,long_substr), token_set_ratio(shorter,long_substr))
+            if score > highest_score_for_overlap:
+                highest_score_for_overlap = score
+                highest_scoring_overlap = [ long_start, long_end, long_substr  ]
+        except:
+            break
+        long_start += 1
+        long_end += 1
+
+
+    '''
     scores = []
     for block in blocks:
         long_start = block[1] - block[0] if (block[1] - block[0]) > 0 else 0
@@ -108,6 +136,7 @@ def search(search_text, body_text, threshold=88):
 
         m2 = SequenceMatcher(None, shorter, long_substr)
         scores.append( [ long_start, long_end, long_substr ] )
+    '''
 
     best_matches = []
     for match in scores:
